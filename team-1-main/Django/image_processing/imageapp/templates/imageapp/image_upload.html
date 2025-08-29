@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Image Process</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- CSSファイルのリンク -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("{% static 'images/12.jpg' %}"); /* 背景画像 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-image: url("12.jpg"); /* 背景画像 */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+
+        p {
+            color: #555;
+        }
+    </style>
+    <script>
+        // 预览上传的图像
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('uploadedImage');
+                output.src = reader.result;
+                // 显示上传图像后的容器
+                document.getElementById('uploadedImageContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload and Process</h1>
+        <!-- 表单用于上传图像 -->
+        <form id="imageForm" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- 如果上传了图像，则不再显示上传框 -->
+            {% if not original_image_url %}
+                <input type="file" name="image" required onchange="previewImage(event)">
+                <br><br>
+            {% else %}
+                <input type="hidden" name="original_image_url" value="{{ original_image_url }}">
+            {% endif %}
+
+            <!-- 操作按钮：旋转、翻转、缩小 -->
+            <button type="submit" name="action" value="rotate">Rotate</button>
+            <button type="submit" name="action" value="flip">Flip</button>
+            <button type="submit" name="action" value="resize">Zoom out</button>
+        </form>
+
+        <!-- 显示上传的原始图像 -->
+        {% if original_image_url %}
+            <h2>Uploaded Image：</h2>
+            <img id="uploadedImage" src="{{ original_image_url }}" alt="Uploaded Image">
+        {% endif %}
+
+        <!-- 如果存在处理后的图像，显示出来 -->
+        {% if processed_image_url %}
+            <h2>Processed Image：</h2>
+            <img src="{{ processed_image_url }}" alt="Processed Image">
+            <p>Save Path：{{ processed_image_url }}</p>
+        {% endif %}
+
+        <!-- 重新上传图像按钮（如果图像已上传，则允许重新上传） -->
+        {% if original_image_url %}
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="action" value="new_upload">Upload A New Image</button>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>
