@@ -1,7 +1,9 @@
 ## 概要
 学部時代に中国の東北大学の学生の方々とチームで制作したWebアプリケーションです。
 Djangoを使用して簡単な画像処理を行えます。
-私は主にDjangoを用いたWebアプリケーションのUI部分を担当しました。
+私は主にDjangoを用いたアプリのUI部分を担当しました。
+
+![スクリーンショット](images/screenshot.png)
 
 # Project for Image Process
 This is a project for a PBL course.
