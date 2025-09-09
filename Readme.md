@@ -5,6 +5,10 @@ Djangoを使用して簡単な画像処理を行えます。
 
 ![スクリーンショット](images/screenshot.png)
 
+## 掲載記事
+大学のホームページで紹介された記事
+https://www.kyutech.ac.jp/whats-new/topics/entry-10912.html
+
 # Project for Image Process
 This is a project for a PBL course.
 
